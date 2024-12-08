@@ -8,28 +8,20 @@ public sealed class Quest01
     [TestMethod]
     public void Part1()
     {
-        var baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..");
-        var fileName = Path.Combine(baseDir, "Input", $"Quest01_01.input");
-        Assert.IsTrue(Path.Exists(fileName));
-        var lines = File.ReadAllLines(fileName);
-        Assert.AreEqual(1, lines.Length);
+        var lines = Common.Input("Quest01_01.input");
         var index = "ABC";
         var points = new[] { 0, 1, 3 };
-        Assert.AreEqual(1339, lines[0].Sum(c => points[index.IndexOf(c)]));
+        Assert.AreEqual(1339, lines.First().Sum(c => points[index.IndexOf(c)]));
     }
 
     [TestMethod]
     public void Part2()
     {
-        var baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..");
-        var fileName = Path.Combine(baseDir, "Input", $"Quest01_02.input");
-        Assert.IsTrue(Path.Exists(fileName));
-        var lines = File.ReadAllLines(fileName);
-        Assert.AreEqual(1, lines.Length);
+        var lines = Common.Input("Quest01_02.input");
         var index = "ABCD";
         var points = new[] { 0, 1, 3, 5 };
         var sum = 0;
-        foreach (var chunk in lines[0].Chunk(2))
+        foreach (var chunk in lines.First().Chunk(2))
         {
             if (chunk.Contains('x'))
             {
@@ -51,16 +43,11 @@ public sealed class Quest01
     [TestMethod]
     public void Part3()
     {
-        var baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..");
-        var fileName = Path.Combine(baseDir, "Input", $"Quest01_03.input");
-        Assert.IsTrue(Path.Exists(fileName));
-        var lines = File.ReadAllLines(fileName);
-
-        Assert.AreEqual(1, lines.Length);
+        var lines = Common.Input("Quest01_03.input");
         var index = "ABCD";
         var points = new[] { 0, 1, 3, 5 };
         var sum = 0;
-        foreach (var chunk in lines[0].Chunk(3))
+        foreach (var chunk in lines.First().Chunk(3))
         {
             if (chunk.Contains('x'))
             {
