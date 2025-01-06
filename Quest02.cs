@@ -101,4 +101,124 @@ public sealed class Quest02
         Assert.AreEqual("42", result);
     }
 
+
+    public string Part3(IEnumerable<string> input)
+    {
+        var words = new List<string>();
+        var grid = new List<string>();
+        foreach (var line in input)
+        {
+            if (string.IsNullOrEmpty(line)) continue;
+            if (line.Contains(':'))
+            {
+                var parts = line.Split(':');
+                words = parts[1].Split(',', StringSplitOptions.TrimEntries).ToList();
+            }
+            else
+            {
+                grid.Add(line);
+            }
+        }
+        var matches = new List<List<bool>>();
+        for (var i = 0; i < grid.Count; i++)
+        {
+            matches.Add(new List<bool>(new bool[grid[i].Length]));
+        }
+        var dirs = new List<(int dx, int dy)> { (1, 0), (0, 1), (-1, 0), (0, -1) };
+        for (int y = 0; y < grid.Count; y++)
+        {
+            for (int x = 0; x < grid[y].Length; x++)
+            {
+                foreach (var word in words)
+                {
+                    foreach (var (dx, dy) in dirs)
+                    {
+                        var isMatch = true;
+                        var (px, py) = (x, y);
+
+                        for (var i = 0; i < word.Length; i++)
+                        {
+
+                            if (grid[py][px] != word[i])
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                            px += dx;
+                            py += dy;
+
+                            if (px < 0)
+                            {
+                                px += grid[0].Length;
+                            }
+                            if (px >= grid[0].Length)
+                            {
+                                px -= grid[0].Length;
+                            }
+                            if (i == word.Length - 1)
+                            {
+                                break;
+                            }
+                            if (py < 0)
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                            if (py >= grid.Count)
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+
+                        if (isMatch)
+                        {
+                            (px, py) = (x, y);
+                            //Console.WriteLine($"dir={dx},{dy} pos={px},{py} word={word}");
+
+                            for (var i = 0; i < word.Length; i++)
+                            {
+
+                                matches[py][px] = true;
+
+                                px += dx;
+                                py += dy;
+
+                                if (px < 0)
+                                {
+                                    px += grid[0].Length;
+                                }
+                                if (px >= grid[0].Length)
+                                {
+                                    px -= grid[0].Length;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return matches.Sum(line => line.Count(x => x)).ToString();
+    }
+
+    [TestMethod]
+    public void Quest2_Part3()
+    {
+        var result = Part3(Common.Input("everybody_codes_e2024_q02_p3.txt"));
+        Assert.AreEqual("11333", result);
+    }
+    [TestMethod]
+    public void Quest2_Part3_Example()
+    {
+        var input = """
+            WORDS:THE,OWE,MES,ROD,RODEO
+
+            HELWORLT
+            ENIGWDXL
+            TRODEOAL
+            """;
+        var result = Part3(Common.GetLines(input));
+        Assert.AreEqual("10", result);
+    }
 }
